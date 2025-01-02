@@ -21,11 +21,11 @@
 
 - A dapp sends a proposal namespace to the wallet for pairing. The proposal namespace contains the list of `chains`, `methods` and `events` that the dapp intends to make use of.
 - The wallet validates if the received proposal namespaces are valid and returns a session with its approved namespaces as a response if it is valid along with the approved accounts for each chain in the namespace.
-- If the requested proposal namespaces are not valid based on the wallets rules, the session cannot be established and the wallet rejects it with an error code that tells the dapp if the proposal namespaces have invalid chains, methods, events or if it was simply rejected by the user.
+- If the requested proposal namespaces are not valid based on the wallet rules, the session cannot be established and the wallet rejects it with an error code that tells the dapp if the proposal namespaces have invalid chains, methods, events or if the user simply rejects it.
 
 ### Proposal Namespace Example
 
-An example Proposal Namespace for a dapp which supports connecting to Polkadot, Ethereum, Polygon and Cosmos:
+An example Proposal Namespace for a dapp that supports connecting to Polkadot, Ethereum, Polygon and Cosmos:
 
 ```js
 {
@@ -89,16 +89,16 @@ An example Proposal Namespace for a dapp which supports connecting to Polkadot, 
 
 ### Chains
 
-- `chains` is an array of chain ids which represent the chains the session will be using during its lifetime. For Polkadot, the format for each chain id is the chain agnostic namespace (e.g. `eip155`, `polkadot`, `cosmos` etc) followed by a colon and the genesis hash for the chain (e.g. `91b171bb158e2d3848fa23a9f1c25182` for Polkadot).
+- `chains` is an array of chain ids that represent the chains the session will be using during its lifetime. For Polkadot, the format for each chain id is the chain agnostic namespace (e.g. `eip155`, `polkadot`, `cosmos` etc) followed by a colon and the genesis hash for the chain (e.g. `91b171bb158e2d3848fa23a9f1c25182` for Polkadot).
 - A dapp or wallet can make as many or as few chain ids a part of its namespace as desired.
 
 ### Methods
 
-- `methods` is represented as an array of wallet defined methods that a session supports.
+- `methods` is an array of wallet-defined methods a session supports.
 - These are not pre-defined or centrally implemented and can be modified/extended as needed by a wallet.
 - In the above Polkadot session namespace example there are two given methods `polkadot_signMessage` and `polkadot_signTransaction`. The idea for the functionality of these methods is to sign the relevant data (either a message or unsigned transaction) and return the signature. [An example for each method](https://github.com/WalletConnect/web-examples/blob/main/advanced/wallets/react-wallet-v2/src/lib/PolkadotLib.ts).
-- If a dapp required additional method support such as receiving the signed hex for a transaction in order to submit it rather than the signature, a wallet only needs to define and add support for the method so that any dapp that requires that functionality can use it when making requests.
-- An example would be adding a method named `polkadot_getSignedHex` and creating an implementation that signs, and returns the hash of the signed transaction.
+- If a dapp requires additional method support such as receiving the signed hex for a transaction in order to submit it rather than the signature, a wallet only needs to define and add support for the method so that any dapp that requires that functionality can use it when making requests.
+- An example would be adding a method named `polkadot_getSignedHex` and creating an implementation that signs and returns the hash of the signed transaction.
 
 ```js
 // Example Session Namespace
@@ -145,7 +145,7 @@ public async getSignedHex(payload: SignerPayloadJSON) {
 
 ### Events
 
-- `events` represent specific changes in a sessions state that a dapp or wallet may want to take some action on.
+- `events` represent specific changes in a session state that a dapp or wallet may want to take some action on.
 - For example, a dapp or a wallet might want to perform some action if the user changes the selected session accounts. An example of emitting this event can be found below:
 
 ```js
@@ -163,7 +163,7 @@ This can be useful in a wallet if a user is adding additional accounts to a sess
 
 ### Using Namespaces
 
-In order to creat a session proposal, call the connect method on the universal provider's sign client. The sign clients `connect` method accepts an object based on the following interface:
+In order to create a session proposal, call the connect method on the universal provider's sign client. The sign clients `connect` method accepts an object based on the following interface:
 
 ```js
 interface ConnectParams {
